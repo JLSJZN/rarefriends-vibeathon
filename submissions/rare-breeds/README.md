@@ -2,6 +2,8 @@
 
 ![Rare Breeds: a Friend picks a mate, the egg hatches, the baby inherits pixel rows from both parents](media/gameplay.gif)
 
+*Demo capture from the SDK's automated test runtime; the Mutant and Prismatic tiers in this clip are scripted for the demo. In play, tiers follow the odds below.*
+
 **Play: https://jlsjzn.github.io/friendsdk/**
 
 **Project name**
@@ -25,20 +27,24 @@ https://jlsjzn.github.io/friendsdk/ on GitHub Pages, built with the SDK CLI (`no
 **Wallet and network**
 A browser wallet on **Robinhood mainnet (chain 4663)** holding a hardwired Rare Friends Generations NFT, generation 1 or higher. The SDK runtime connects the wallet, lets you pick the Friend and verifies ownership at a fresh block before play. No RF, private key or transaction signature is needed: all balances and outcomes in the preview are simulated.
 
-## Run it
+## Try it in 60 seconds
 
-Node.js 22.18+ on macOS, Linux or Ubuntu/WSL2:
+1. Open **https://jlsjzn.github.io/friendsdk/** in a browser with MetaMask or Rabby (or the wallet app's browser on a phone), connect, switch to Robinhood mainnet and pick your Friend. Nothing is signed or spent.
+2. Click **Next** through the short intro (or **Skip intro**), then **Find a match** and pick one of three real Friends as the mate.
+3. **Buy egg & breed · 1 RF** (simulated; confirm **Buy egg**, then **Use egg** in the SDK dialogs) and watch both parents' pixel rows merge into the baby. **Keep** it and it follows your Friend and earns Hearts for hats, or trade it in at the Sanctuary.
 
-```sh
-git clone https://github.com/JLSJZN/friendsdk.git
-cd friendsdk
-git checkout rare-breeds
-npm ci
-npm run build
-node scripts/dev-game.mjs dev games/rare-breeds
-```
+## How the NFT is the main character
 
-Open the printed URL, connect the wallet and select your Friend. Add `--host 0.0.0.0 --port 4173` to play from a phone wallet browser on the same network.
+- **You play as your Friend, and it is never recoloured.** Its 64 canonical frames (idle and walk, four facings, eight frames each) are read on-chain from the FamiliesRegistry through the SDK and drawn pixel for pixel at an integer scale, with a white sticker outline. The intro opens on your own Friend: 16 rows x 16 = 256 pixels per frame, and the genome spans all 64 frames.
+- **Its pixels literally become the baby.** Each of the baby's 16 rows is copied from one parent, in runs of 2 to 5 rows (each parent gives at least 4). One row mask covers all 64 frames, so the baby walks with a real mix of both parents' walk cycles. Frames are repaired into one connected body with the fewest added pixels; no inherited pixel is ever removed, and symmetric parents give symmetric babies. The result card shows the DNA strip: which rows came from whom.
+- **Hats sit on the canonical art, not over it.** Each hat is anchored to every frame's own head, so it bobs with the Friend's idle frames and walks with its walk cycle in all four facings, and it never covers a pixel of body ink. Tests check this on all 73 pool Friends and 32 bred babies (mutants, prismatics, Side-walkers, F2), 64 frames each.
+- **The mates are real Friends too:** 73 Generations Friends from all nine families, with their canonical art.
+- **Family genes carry over.** Colossus Friends have no front or back art, so **Side-walker** is dominant: any baby with a Colossus parent shows its right-facing frames from every side, and passes that on to F2 and F3.
+- **Lineage.** A baby is one generation past its older parent (F1, F2, F3...), and every baby traces back to the holder's own Friend.
+
+![Friend #77949 bred with one Friend of every family, in all four tiers, with the walk cycle of each Prismatic baby](https://raw.githubusercontent.com/JLSJZN/friendsdk/rare-breeds/games/rare-breeds/docs/media/genetics-sheet.png)
+
+![All 8 hats on Friend #77949, one Friend of every family and bred babies, anchored frame by frame](https://raw.githubusercontent.com/JLSJZN/friendsdk/rare-breeds/games/rare-breeds/docs/media/accessories-sheet.png)
 
 ## How to play
 
@@ -82,37 +88,6 @@ The Egg incubator sells 1, 3 or 5 eggs in one confirmation. Everything stays ins
 
 Full tables, base units and the Monte Carlo: [Rules and rewards](https://github.com/JLSJZN/friendsdk/blob/rare-breeds/games/rare-breeds/README.md#rules-and-rewards-rf-simulated) · `node tools/economy-report.mjs`.
 
-## How the NFT is the main character
-
-- **You play as your Friend.** Its 64 canonical frames (idle and walk, four facings, eight frames each) are read on-chain from the FamiliesRegistry through the SDK and drawn pixel for pixel at an integer scale, with a white sticker outline. The intro opens on your own Friend: 16 rows x 16 = 256 pixels.
-- **Its pixels literally become the baby.** Each of the baby's 16 rows is copied from one parent, in runs of 2 to 5 rows (each parent gives at least 4). One row mask covers all 64 frames, so the baby walks with a real mix of both parents' walk cycles. Frames are repaired into one connected body with the fewest added pixels; no inherited pixel is ever removed, and symmetric parents give symmetric babies. The result card shows the DNA strip: which rows came from whom.
-- **Hats sit on the canonical art, not over it.** Each hat is anchored to every frame's own head, so it bobs with the Friend's idle frames and walks with its walk cycle in all four facings, and it never covers a pixel of body ink. Tests check this on all 73 pool Friends and 32 bred babies (mutants, prismatics, Side-walkers, F2), 64 frames each.
-- **The mates are real Friends too:** 73 Generations Friends from all nine families, with their canonical art.
-- **Family genes carry over.** Colossus Friends have no front or back art, so **Side-walker** is dominant: any baby with a Colossus parent shows its right-facing frames from every side, and passes that on to F2 and F3.
-- **Lineage.** A baby is one generation past its older parent (F1, F2, F3...), and every baby traces back to the holder's own Friend.
-
-![Friend #77949 bred with one Friend of every family, in all four tiers, with the walk cycle of each Prismatic baby](https://raw.githubusercontent.com/JLSJZN/friendsdk/rare-breeds/games/rare-breeds/docs/media/genetics-sheet.png)
-
-![All 8 hats on Friend #77949, one Friend of every family and bred babies, anchored frame by frame](https://raw.githubusercontent.com/JLSJZN/friendsdk/rare-breeds/games/rare-breeds/docs/media/accessories-sheet.png)
-
-## What would be on-chain
-
-Nothing in this build; no transaction is ever sent. **Going live needs no new contract:** it is a deployment of the SDK's existing `ChanceGame` with this `game.json` (consumable Egg, four outcomes), used through the SDK's live runtime from the Friend's canonical wallet.
-
-| In the game | SDK action | Existing `ChanceGame` effect |
-| --- | --- | --- |
-| Buy eggs | `buy(quantity)` | Exact RF approval; RF moves from the Friend's canonical wallet into the game; 6 RF reserved per egg; Egg tokens minted to that wallet |
-| Breed | `play(1)` | Burns one Egg and commits the play. No outcome exists yet |
-| Hatch | `settle(playId)` | One Dice randomness request per batch (fee capped at 0.000025 ETH excluding gas), then `roll = keccak256(word, game, chainId, batchId, playId) % 10000` against the cumulative weights; mints one tier token (ERC-1155 id 1 to 4) to the Friend's canonical wallet |
-| Keep | none | The tier token stays in the Friend wallet, backed, no expiry |
-| Trade in at the Sanctuary | `redeem(outcomeId, 1)` | Burns one tier token and pays its fixed RF to the Friend's canonical wallet |
-
-On-chain: RF, Eggs, tier tokens, backing and every tier. Off-chain: the baby's pixels (derived deterministically from Friend ID, parent A, parent B and play ID; genetics receives the settled tier as an input and cannot choose or change it), Hearts, hats and the collection.
-
-## How randomness is used
-
-Only the tier is a paid random outcome. In the preview the SDK ledger draws one roll per settle; live, it comes from Dice as above: the Egg is burned before any randomness exists, there is no reroll, and an unsettled play resumes as **Finish hatching** without using another egg. The baby's rows, pattern, mutation and name come from a seeded generator, so the same pair and play always give the same baby. The three wild Friends offered (also after a Wish) and idle animations are browser-random with no RF value; the "chemistry" hearts are flavour ("Same odds for every pair").
-
 ## Economy Potential
 
 **Today (simulated, SDK `ChanceGame` unchanged): two currencies with a hard line between them.**
@@ -136,6 +111,24 @@ The two connect at the reveal card: fixed RF now, or Hearts over time plus a par
 
 A sire market would turn every holder's Friend into an RF-earning asset: its art becomes breeding stock that others pay to use. Cosmetics sold for RF would be a pure sink, and hats already sit on each Friend's own art. The 6 RF per egg backing is unchanged in every row.
 
+## What would be on-chain
+
+Nothing in this build; no transaction is ever sent. **Going live needs no new contract:** it is a deployment of the SDK's existing `ChanceGame` with this `game.json` (consumable Egg, four outcomes), used through the SDK's live runtime from the Friend's canonical wallet.
+
+| In the game | SDK action | Existing `ChanceGame` effect |
+| --- | --- | --- |
+| Buy eggs | `buy(quantity)` | Exact RF approval; RF moves from the Friend's canonical wallet into the game; 6 RF reserved per egg; Egg tokens minted to that wallet |
+| Breed | `play(1)` | Burns one Egg and commits the play. No outcome exists yet |
+| Hatch | `settle(playId)` | One Dice randomness request per batch (fee capped at 0.000025 ETH excluding gas), then `roll = keccak256(word, game, chainId, batchId, playId) % 10000` against the cumulative weights; mints one tier token (ERC-1155 id 1 to 4) to the Friend's canonical wallet |
+| Keep | none | The tier token stays in the Friend wallet, backed, no expiry |
+| Trade in at the Sanctuary | `redeem(outcomeId, 1)` | Burns one tier token and pays its fixed RF to the Friend's canonical wallet |
+
+On-chain: RF, Eggs, tier tokens, backing and every tier. Off-chain: the baby's pixels (derived deterministically from Friend ID, parent A, parent B and play ID; genetics receives the settled tier as an input and cannot choose or change it), Hearts, hats and the collection.
+
+## How randomness is used
+
+Only the tier is a paid random outcome. In the preview the SDK ledger draws one roll per settle; live, it comes from Dice as above: the Egg is burned before any randomness exists, there is no reroll, and an unsettled play resumes as **Finish hatching** without using another egg. The baby's rows, pattern, mutation and name come from a seeded generator, so the same pair and play always give the same baby. The three wild Friends offered (also after a Wish) and idle animations are browser-random with no RF value; the "chemistry" hearts are flavour ("Same odds for every pair").
+
 ## Needs future SDK support
 
 - **Persistence:** a per-Friend save for the brood, lineage, chosen pairs, Hearts, hats and the collection (the sandbox has no storage and the bridge no save API).
@@ -143,6 +136,21 @@ A sire market would turn every holder's Friend into an RF-earning asset: its art
 - **Sire market:** opt-in sire listings, RF payment to another Friend's canonical wallet, and runtime sprite reads of listed Friends. SDK v0.1.2 has no trading, revenue-share or creator-fee actions.
 - **More consumables and RF sinks:** generation-priced eggs, a burn share at purchase, and RF purchases of cosmetics (one consumable, no upgrade or cosmetic action and no burn path today).
 - **Unique baby tokens:** today's tier tokens are fungible per tier; minting each baby as its own NFT needs a minting API.
+
+## Run it
+
+Node.js 22.18+ on macOS, Linux or Ubuntu/WSL2:
+
+```sh
+git clone https://github.com/JLSJZN/friendsdk.git
+cd friendsdk
+git checkout rare-breeds
+npm ci
+npm run build
+node scripts/dev-game.mjs dev games/rare-breeds
+```
+
+Open the printed URL, connect the wallet and select your Friend. Add `--host 0.0.0.0 --port 4173` to play from a phone wallet browser on the same network.
 
 ## Checks
 
