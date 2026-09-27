@@ -10,7 +10,7 @@
 Rare Breeds
 
 **Builder / contact**
-GitHub [@JLSJZN](https://github.com/JLSJZN) · X [@JLSJZN](https://x.com/JLSJZN) · prize wallet `0xe3Ae2aed450D03F0160E6bE6aa0DFfF64b052fE8`
+GitHub [@JLSJZN](https://github.com/JLSJZN) · X [@JLSJZN](https://x.com/JLSJZN) · Telegram [@JLSJZN](https://t.me/JLSJZN) · prize wallet `0xe3Ae2aed450D03F0160E6bE6aa0DFfF64b052fE8`
 
 **Category**
 Character Spotlight (primary) · Economy Potential (secondary)
