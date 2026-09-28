@@ -1,10 +1,15 @@
 # Rare Breeds
 
+- **▶ Play:** https://jlsjzn.github.io/friendsdk/ (wallet on Robinhood mainnet with a hardwired Friend; everything is simulated)
+- **🎬 Start here, the interactive guide and 45 s trailer:** https://jlsjzn.github.io/friendsdk/preview/
+
+**The guide explains the whole game in detail and is worth a look before playing.** No wallet needed: scroll through one egg while its 16 pixel rows fly from both parents into the baby, hatch any two of the 73 real Friends in the DNA lab with the game's own hatch animation, and fly the Moon Slingshot yourself: hold to climb, let go to jump. It runs the game's real genetics and scenes, so it is the fastest way to see what only Rare Breeds does.
+
+[![Rare Breeds interactive guide and trailer: a Prismatic baby hatching. Click to open the guide.](https://raw.githubusercontent.com/JLSJZN/friendsdk/4e2167b/games/rare-breeds/docs/media/trailer-poster.png)](https://jlsjzn.github.io/friendsdk/preview/)
+
 ![Rare Breeds: a Friend picks a mate, the egg hatches, the baby inherits pixel rows from both parents](media/gameplay.gif)
 
 *Demo capture from the SDK's automated test runtime; the tiers in this clip are scripted for the demo. In play, tiers follow the odds below.*
-
-**Play: https://jlsjzn.github.io/friendsdk/**
 
 **Project name**
 Rare Breeds
@@ -24,10 +29,15 @@ Your Friend's 256 on-chain pixels are its DNA: pair it with a real Rare Friend, 
 **Playable preview**
 https://jlsjzn.github.io/friendsdk/ on GitHub Pages, built with the SDK CLI (`node tools/build-pages.mjs --base friendsdk`).
 
+**Interactive guide and trailer**
+https://jlsjzn.github.io/friendsdk/preview/ (no wallet): a static page next to the game, built with `node tools/build-preview.mjs` from the same fork (branch `preview-page`, commit [`92d32f1`](https://github.com/JLSJZN/friendsdk/tree/92d32f1/games/rare-breeds/preview)). It reuses the game's own pure modules (genetics, sprites, the nursery art, the hatch and flight scenes) and is an explainer, not the game: no RF, no eggs, nothing is saved, and every link to play goes through the wallet gate. The 45 s trailer on it was recorded from the game with `tools/scenarios/rare-breeds-trailer.mjs`.
+
 **Wallet and network**
 A browser wallet on **Robinhood mainnet (chain 4663)** holding a hardwired Rare Friends Generations NFT, generation 1 or higher. The SDK runtime connects the wallet, lets you pick the Friend and verifies ownership at a fresh block before play. No RF, private key or transaction signature is needed: all balances and outcomes in the preview are simulated.
 
 ## Try it in 60 seconds
+
+No wallet at hand? The [interactive guide](https://jlsjzn.github.io/friendsdk/preview/) shows every mechanic right in the browser, then come back here.
 
 1. Open **https://jlsjzn.github.io/friendsdk/** in a browser with MetaMask or Rabby (or the wallet app's browser on a phone), connect, switch to Robinhood mainnet and pick your Friend. Nothing is signed or spent.
 2. Click through the short intro (or **Skip intro**), then **Find a match** and pick one of three real Friends as the mate.
@@ -209,6 +219,7 @@ All run on commit `6c25080` (FriendSDK v0.1.2, Node 22.18, macOS).
 - [x] Flight and UI harnesses (`dev/launch/shoot.mjs`, `dev/ui/shots.mjs`: every flight ending, reduced motion, held keys, pause, desktop, 390 and 360 px phones): PASS
 - [x] GitHub Pages build `node tools/build-pages.mjs --smoke --base friendsdk`: PASS, deployed from `6c25080`
 - [x] Hosted preview loads the SDK wallet gate with no console errors
+- [x] Interactive guide `node tools/build-preview.mjs`: typecheck clean, the game build contains none of its files, headless run on desktop 1440 x 900 and phone 390 x 844 (full scroll, a DNA lab hatch) with no errors and no sideways scroll, deployed to [`/preview/`](https://jlsjzn.github.io/friendsdk/preview/) from `92d32f1`
 - [ ] Real-wallet playthrough: the builder connected Rabby on desktop, Friend #77949 (generation 4) passed the SDK ownership check and the game loaded on an earlier build; a full desktop and phone playthrough of this build with a real wallet is still to be reported here
 
 Independent first-time player and code reviews ran on this build before release (no blockers, no money-path defects); their findings are fixed in `6c25080`.
@@ -239,4 +250,4 @@ The browser test drives the real sandboxed runtime and its confirmations: the si
 
 ## Credits
 
-Character art: canonical Rare Friends Generations sprites from the FamiliesRegistry (`0x246E3E9730A7Eade94c79be0Fd78d210f89AEb8D`, chain 4663); your Friend is read live through the SDK, the 73 wild mates are a snapshot taken with `tools/fetch-wild-friends.mjs`, and babies are derived from those pixels. Sounds: FriendSDK sound kit. Wallet, Friend selection, ownership gate, simulated ledger and confirmations: FriendSDK v0.1.2 runtime (Apache-2.0, [notices](https://github.com/JLSJZN/friendsdk/blob/6c25080/NOTICE.md)). Nursery, stations, hatch effects, hats, icons and pixel lettering are drawn in code: no image, font or audio files and no third-party assets. Breeding as a mechanic is a nod to CryptoKitties; no assets or code are used.
+Character art: canonical Rare Friends Generations sprites from the FamiliesRegistry (`0x246E3E9730A7Eade94c79be0Fd78d210f89AEb8D`, chain 4663); your Friend is read live through the SDK, the 73 wild mates are a snapshot taken with `tools/fetch-wild-friends.mjs`, and babies are derived from those pixels. Sounds: FriendSDK sound kit. Wallet, Friend selection, ownership gate, simulated ledger and confirmations: FriendSDK v0.1.2 runtime (Apache-2.0, [notices](https://github.com/JLSJZN/friendsdk/blob/6c25080/NOTICE.md)). Nursery, stations, hatch effects, hats, icons and pixel lettering are drawn in code: no image, font or audio files and no third-party assets. Breeding as a mechanic is a nod to CryptoKitties; no assets or code are used. The interactive guide page (not the game) loads the fonts Silkscreen, Sometype Mono and Archivo from Google Fonts (SIL Open Font License) and uses the X, Telegram and GitHub marks from Simple Icons (CC0); it is a community page, not an official Rare Friends page.
